@@ -652,3 +652,545 @@ body.page-center {
   opacity: 0.8;
   text-decoration: underline;
 }
+.layout-single {
+  grid-template-columns: 1fr;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.btn-xs,
+.btn-sm {
+  font-size: 9px;
+  padding: 4px 10px;
+  border-radius: 10px;
+}
+
+.api-key-block {
+  margin-bottom: 4px;
+}
+
+.api-key-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  align-items: center;
+}
+
+.note-box {
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: radial-gradient(circle at top, rgba(148,163,253,0.06), #020817);
+}
+
+.note-title {
+  margin: 0 0 4px;
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.note-list {
+  margin: 0 0 0 14px;
+  padding: 0;
+  font-size: 8px;
+  color: var(--muted);
+  list-style: disc;
+}
+
+.status-ok {
+  color: #4ade80;
+}
+
+.iframe-wrapper {
+  margin-top: 4px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #020817;
+  height: 180px;
+}
+
+.iframe-wrapper iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.btn-gemini {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-size: 9px;
+  cursor: pointer;
+  border: 1px solid var(--accent);
+  background: radial-gradient(circle at top left,
+      rgba(99, 102, 241, 0.14),
+      rgba(2, 6, 23, 1));
+  color: var(--accent);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.9);
+  transition: all 0.18s ease;
+}
+
+.btn-gemini::before {
+  content: "⚡";
+  font-size: 9px;
+}
+
+.btn-gemini:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.95);
+  background: radial-gradient(circle at top left,
+      rgba(129, 140, 248, 0.20),
+      rgba(2, 6, 23, 1));
+  color: #e5e7eb;
+}
+
+.btn-gemini:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.9);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ヘッダーの操作ボタン（Gemini設定 / ログアウト） */
+.btn-header {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 9px;
+  border: 1px solid var(--accent-soft);
+  background: radial-gradient(circle at top,
+      rgba(148, 163, 253, 0.14),
+      rgba(2, 6, 23, 1));
+  color: var(--accent);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.85);
+  transition: all 0.18s ease;
+}
+
+.btn-header:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.95);
+  color: #e5e7eb;
+  border-color: var(--accent);
+}
+
+.btn-header:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.9);
+}
+
+.btn-header-secondary {
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--border);
+  box-shadow: none;
+}
+
+.btn-header-secondary:hover {
+  background: rgba(15, 23, 42, 0.96);
+  color: #e5e7eb;
+  border-color: var(--accent-soft);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.9);
+}
+
+/* Geminiボタン（既に追加している場合はこのままでOK） */
+.btn-gemini {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-size: 9px;
+  cursor: pointer;
+  border: 1px solid var(--accent);
+  background: radial-gradient(circle at top left,
+      rgba(99, 102, 241, 0.14),
+      rgba(2, 6, 23, 1));
+  color: var(--accent);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.9);
+  transition: all 0.18s ease;
+}
+
+.btn-gemini::before {
+  content: "⚡";
+  font-size: 9px;
+}
+
+.btn-gemini:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.95);
+  background: radial-gradient(circle at top left,
+      rgba(129, 140, 248, 0.20),
+      rgba(2, 6, 23, 1));
+  color: #e5e7eb;
+}
+
+.btn-gemini:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.9);
+}
+
+/* ダウンロードボタンを「押せそう」に */
+.btn-download {
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 9px;
+  border: 1px solid var(--border);
+  background: rgba(2, 6, 23, 0.98);
+  color: var(--muted);
+  cursor: not-allowed;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.18s ease;
+}
+
+.btn-download:not(:disabled) {
+  cursor: pointer;
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.9);
+}
+
+.btn-download:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.95);
+  background: radial-gradient(circle at top,
+      rgba(129, 140, 248, 0.14),
+      rgba(2, 6, 23, 1));
+  color: #e5e7eb;
+}
+
+.panel-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-window {
+  flex: 1;
+  min-height: 220px;
+  max-height: 360px;
+  padding: 8px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: radial-gradient(circle at top,
+      rgba(15,23,42,0.96),
+      rgba(2,6,23,1));
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chat-message {
+  padding: 6px 8px;
+  border-radius: 10px;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.chat-message.assistant {
+  align-self: flex-start;
+  background: rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(79,70,229,0.4);
+  color: var(--accent);
+}
+
+.chat-message.user {
+  align-self: flex-end;
+  background: rgba(15,23,42,1);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.chat-input {
+  flex: 1;
+  font-size: 10px;
+}
+
+.btn-chat {
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 9px;
+  border: 1px solid var(--accent-soft);
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.btn-chat:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px var(--accent-soft);
+}
+
+/* 右側エディタ */
+
+.panel-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.editor-head {
+  margin-bottom: 4px;
+}
+
+.editor-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.field-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.input-inline {
+  width: 120px;
+  padding: 4px 8px;
+  font-size: 9px;
+}
+
+.editor-reset {
+  margin-left: auto;
+}
+
+.editor-generate {
+  margin-top: 4px;
+  align-self: flex-start;
+}
+
+.results-header {
+  margin-top: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-actions {
+  margin-top: 2px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-gemini-inline {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 9px;
+  border: 1px solid var(--accent-soft);
+  background: radial-gradient(circle at top left,
+      rgba(99, 102, 241, 0.16),
+      rgba(2, 6, 23, 1));
+  color: var(--accent);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.9);
+  transition: all 0.18s ease;
+}
+
+.btn-gemini-inline::before {
+  content: "✨";
+  font-size: 9px;
+}
+
+.btn-gemini-inline:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(15, 23, 42, 0.95);
+  background: radial-gradient(circle at top left,
+      rgba(129, 140, 248, 0.22),
+      rgba(2, 6, 23, 1));
+  color: #e5e7eb;
+}
+
+.btn-gemini-inline:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.9);
+}
+
+/* settings.html 用のレイアウト微調整 */
+
+.api-key-actions {
+  margin-top: 6px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* APIキー入力とモデル選択の間にしっかり余白 */
+.models-block {
+  margin-top: 22px;
+}
+
+/* 「モデル一覧を取得」ボタンを少し目立たせる */
+.btn-load-models {
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-size: 9px;
+  border: 1px solid var(--accent-soft);
+  background: radial-gradient(circle at top left,
+      rgba(99, 102, 241, 0.18),
+      rgba(2, 6, 23, 1));
+  color: var(--accent);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.9);
+  transition: all 0.18s ease;
+}
+
+.btn-load-models:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.95);
+  background: radial-gradient(circle at top left,
+      rgba(129, 140, 248, 0.26),
+      rgba(2, 6, 23, 1));
+  color: #e5e7eb;
+}
+
+.btn-load-models:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.9);
+}
+
+.chat-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.chat-row.assistant {
+  justify-content: flex-start;
+}
+
+.chat-row.user {
+  justify-content: flex-end;
+}
+
+.chat-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.chat-avatar.assistant {
+  background: rgba(79, 70, 229, 0.22);
+  color: var(--accent);
+}
+
+.chat-avatar.user {
+  background: rgba(15, 23, 42, 1);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.chat-message.assistant {
+  max-width: 78%;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(79, 70, 229, 0.35);
+  color: var(--accent);
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.chat-message.user {
+  max-width: 78%;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 1);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.chat-prompt-block {
+  max-width: 78%;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: radial-gradient(circle at top left,
+      rgba(99,102,241,0.16),
+      rgba(2,6,23,1));
+  border: 1px solid rgba(79,70,229,0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 9px;
+}
+
+.chat-prompt-label {
+  font-size: 8px;
+  color: var(--accent);
+  opacity: 0.9;
+}
+
+.chat-prompt-text {
+  color: var(--text);
+  word-break: break-word;
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+  align-items: flex-end;
+}
+
+.chat-input {
+  flex: 1;
+  font-size: 10px;
+  padding: 6px 8px;
+  min-height: 40px;
+  max-height: 96px;
+  resize: vertical; /* 好みで none / vertical */
+}
+
+.btn-chat {
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 9px;
+  border: 1px solid var(--accent-soft);
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  height: 30px;          /* ★ 固定高さ */
+  flex-shrink: 0;        /* ★ つぶれ防止 */
+  transition: all 0.18s ease;
+}
