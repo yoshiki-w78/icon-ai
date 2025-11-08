@@ -3,6 +3,92 @@
 // ============================
 let googleInitialized = false;
 
+// ============================
+// GitHub OAuth Configuration
+// ============================
+let githubAuthWindow = null;
+
+// GitHub ログインを開始
+function handleGithubLogin() {
+  // Client ID のチェック
+  if (!CONFIG.GITHUB_CLIENT_ID || CONFIG.GITHUB_CLIENT_ID === 'YOUR_GITHUB_CLIENT_ID_HERE') {
+    alert('GitHub Client ID が設定されていません。\nconfig.js を確認してください。');
+    console.error('GitHub Client ID not configured');
+    return;
+  }
+
+  // GitHub OAuth URL を構築
+  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${CONFIG.GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(CONFIG.GITHUB_REDIRECT_URI)}&scope=read:user user:email`;
+
+  // ポップアップウィンドウで GitHub 認証ページを開く
+  const width = 600;
+  const height = 700;
+  const left = window.screenX + (window.outerWidth - width) / 2;
+  const top = window.screenY + (window.outerHeight - height) / 2;
+
+  githubAuthWindow = window.open(
+    githubAuthUrl,
+    'github-auth',
+    `width=${width},height=${height},left=${left},top=${top},toolbar=no,location=no,status=no,menubar=no`
+  );
+
+  console.log('GitHub OAuth popup opened');
+}
+
+// GitHub 認証後のメッセージを受信
+window.addEventListener('message', (event) => {
+  // セキュリティ: origin をチェック
+  if (event.origin !== window.location.origin) {
+    return;
+  }
+
+  if (event.data.type === 'github-auth-success') {
+    const code = event.data.code;
+    console.log('GitHub auth code received:', code);
+
+    // 簡易版: code を使ってユーザー情報を取得
+    // 注意: 本番環境では code をバックエンドに送信してアクセストークンを取得する必要があります
+    handleGithubAuthCode(code);
+  }
+});
+
+// GitHub 認証コードを処理(簡易版)
+async function handleGithubAuthCode(code) {
+  try {
+    // 注意: これは簡易版です
+    // 本番環境では、code をバックエンドに送信し、
+    // バックエンドで GitHub API にアクセストークンを要求する必要があります
+    
+    // 簡易版: ダミーのユーザー情報を保存
+    const user = {
+      provider: 'github',
+      code: code, // 本来はここにアクセストークンを保存
+      loginTime: new Date().toISOString(),
+      // 実際のユーザー情報は GitHub API から取得する必要があります
+      note: 'バックエンド連携が必要です'
+    };
+
+    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('github_auth_code', code);
+
+    // モーダルを閉じる
+    const modal = document.getElementById('login-modal');
+    modal.classList.remove('active');
+
+    // UI を更新
+    updateUIForLoggedInUser(user);
+
+    alert('GitHub ログイン成功!\n\n注意: これは簡易版です。\n本番環境ではバックエンドでトークン交換が必要です。\n\nauth code: ' + code.substring(0, 20) + '...');
+  } catch (error) {
+    console.error('GitHub auth processing error:', error);
+    alert('GitHub ログイン処理に失敗しました');
+  }
+}
+
+// ============================
+// JWT Parser (for Google)
+// ============================
+
 // JWT トークンをデコードする関数
 function parseJwt(token) {
   try {
@@ -185,8 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (githubBtn) {
     githubBtn.addEventListener('click', () => {
       console.log('GitHub login clicked');
-      alert('GitHub ログインは開発中です');
-      // Implement GitHub OAuth here
+      handleGithubLogin();
     });
   }
   
@@ -216,13 +301,21 @@ window.addEventListener('load', () => {
   // Google Sign-In を初期化
   initGoogleSignIn();
   
+  // GitHub の認証コードがある場合の処理
+  const githubCode = localStorage.getItem('github_auth_code');
+  if (githubCode) {
+    console.log('GitHub auth code found in localStorage');
+    // コードは既に処理済みなので削除
+    localStorage.removeItem('github_auth_code');
+  }
+  
   // 既存のログイン状態をチェック
   const savedUser = localStorage.getItem('user');
   if (savedUser) {
     try {
       const user = JSON.parse(savedUser);
       updateUIForLoggedInUser(user);
-      console.log('既存のログイン状態を復元:', user.email);
+      console.log('既存のログイン状態を復元:', user.email || user.provider);
     } catch (e) {
       console.error('ログイン状態の復元に失敗:', e);
       localStorage.removeItem('user');

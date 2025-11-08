@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub ログイン中...</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .container {
+      text-align: center;
+    }
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .error {
+      color: #ffcccc;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="spinner"></div>
+    <h2>GitHub でログイン中...</h2>
+    <p id="status">認証情報を処理しています...</p>
+    <p id="error" class="error" style="display: none;"></p>
+  </div>
+
+  <script>
+    // URL パラメータから code を取得
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    const error = urlParams.get('error');
+    const errorDescription = urlParams.get('error_description');
+
+    const statusEl = document.getElementById('status');
+    const errorEl = document.getElementById('error');
+
+    if (error) {
+      // エラーがある場合
+      statusEl.textContent = 'ログインがキャンセルされました';
+      errorEl.textContent = `エラー: ${error} - ${errorDescription || ''}`;
+      errorEl.style.display = 'block';
+      
+      setTimeout(() => {
+        window.close();
+        // popup が閉じない場合は親ウィンドウに戻る
+        if (window.opener) {
+          window.opener.location.href = '/';
+        } else {
+          window.location.href = '/';
+        }
+      }, 3000);
+    } else if (code) {
+      // 認証コードを取得した場合
+      statusEl.textContent = 'GitHub 認証コードを取得しました';
+      
+      // 簡易版: code を localStorage に保存して親ウィンドウに通知
+      // 注意: 本番環境では code をバックエンドに送信してトークン交換が必要
+      
+      if (window.opener) {
+        // popup から開いた場合
+        window.opener.postMessage(
+          {
+            type: 'github-auth-success',
+            code: code
+          },
+          window.location.origin
+        );
+        statusEl.textContent = 'ログイン完了! ウィンドウを閉じています...';
+        setTimeout(() => {
+          window.close();
+        }, 1000);
+      } else {
+        // 直接アクセスした場合
+        localStorage.setItem('github_auth_code', code);
+        statusEl.textContent = 'ログイン完了! リダイレクトしています...';
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1000);
+      }
+    } else {
+      // code も error もない場合
+      statusEl.textContent = '認証情報が見つかりません';
+      errorEl.textContent = '無効なコールバックです';
+      errorEl.style.display = 'block';
+      
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
