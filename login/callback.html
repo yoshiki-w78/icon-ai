@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ログイン処理中... | IconForge AI</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .callback-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 32px;
+    }
+    
+    .callback-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 24px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .callback-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    
+    .callback-text {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    
+    .callback-error {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 24px;
+      max-width: 500px;
+    }
+    
+    .callback-back-btn {
+      margin-top: 16px;
+      padding: 12px 24px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    
+    .callback-back-btn:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body class="page-center">
+  <div class="callback-container">
+    <div class="callback-spinner"></div>
+    <h1 class="callback-title">ログイン処理中...</h1>
+    <p class="callback-text">しばらくお待ちください</p>
+    <div id="error-message" class="callback-error" style="display: none;">
+      <p id="error-text"></p>
+      <button class="callback-back-btn" onclick="window.location.href='/index.html'">
+        トップページに戻る
+      </button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    // ============================
+    // OAuth Callback Handler
+    // ============================
+    
+    // URLパラメータを取得
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    const error = urlParams.get('error');
+    const state = urlParams.get('state');
+    
+    // エラーチェック
+    if (error) {
+      showError(`認証エラー: ${error}`);
+    } else if (!code) {
+      showError('認証コードが見つかりません。もう一度ログインしてください。');
+    } else {
+      // 認証コードをバックエンドに送信してトークンと交換
+      handleCallback(code);
+    }
+    
+    async function handleCallback(code) {
+      try {
+        console.log('認証コードを受信:', code);
+        
+        // バックエンドAPIにPOSTリクエスト
+        const response = await fetch(`${CONFIG.API_BASE_URL}/api/auth/callback`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            code: code,
+            provider: detectProvider()
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.success && data.user) {
+          // ユーザー情報を保存
+          localStorage.setItem('user', JSON.stringify(data.user));
+          
+          // トークンがあれば保存
+          if (data.token) {
+            localStorage.setItem('auth_token', data.token);
+          }
+          
+          console.log('ログイン成功:', data.user.email);
+          
+          // メインページにリダイレクト
+          window.location.href = '/index.html';
+        } else {
+          throw new Error(data.message || 'ログインに失敗しました');
+        }
+        
+      } catch (error) {
+        console.error('コールバック処理エラー:', error);
+        showError(`ログイン処理に失敗しました: ${error.message}`);
+      }
+    }
+    
+    // プロバイダーを検出（URLから推測）
+    function detectProvider() {
+      const referrer = document.referrer.toLowerCase();
+      if (referrer.includes('google')) return 'google';
+      if (referrer.includes('github')) return 'github';
+      return 'unknown';
+    }
+    
+    // エラー表示
+    function showError(message) {
+      document.querySelector('.callback-spinner').style.display = 'none';
+      document.querySelector('.callback-title').textContent = 'エラーが発生しました';
+      document.querySelector('.callback-text').style.display = 'none';
+      
+      const errorDiv = document.getElementById('error-message');
+      const errorText = document.getElementById('error-text');
+      errorText.textContent = message;
+      errorDiv.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
