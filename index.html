@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>IconForge AI - アイコン生成</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="page">
+  <header class="header">
+    <div>
+      <h1 class="title">IconForge AI</h1>
+      <p class="subtitle">サービス名とキーワードから、一瞬でAIアイコン案を生成</p>
+    </div>
+    <div class="header-right">
+      <span class="tag">Hackathon Prototype</span>
+      <button id="logout-btn" class="btn-ghost">ログアウト</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- 左：コントロール -->
+    <section class="panel">
+      <label class="label">
+        サービス名（任意）
+        <input id="service-name" class="input" placeholder="例）NovaPay, CloudChat..." />
+      </label>
+
+      <label class="label">
+        キーワード（必須）
+        <textarea
+          id="keywords"
+          class="textarea"
+          placeholder="例）AI, シンプル, 稲妻, ブルー, 未来感"
+        ></textarea>
+      </label>
+
+      <div class="field">
+        <p class="label-text">スタイル</p>
+        <div class="chip-group" id="style-group">
+          <button data-value="gradient" class="chip chip-active">Gradient</button>
+          <button data-value="minimal" class="chip">Minimal</button>
+          <button data-value="flat" class="chip">Flat</button>
+          <button data-value="outline" class="chip">Outline</button>
+          <button data-value="neon" class="chip">Neon</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <p class="label-text">トーン</p>
+        <div class="chip-group" id="tone-group">
+          <button data-value="casual" class="chip chip-active">カジュアル</button>
+          <button data-value="business" class="chip">ビジネス</button>
+          <button data-value="pop" class="chip">ポップ</button>
+          <button data-value="dark" class="chip">ダーク</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <p class="label-text">カラーパレット</p>
+        <div class="chip-group" id="palette-group">
+          <button data-value="auto" class="chip chip-active">自動</button>
+          <button data-value="blue" class="chip">ブルー系</button>
+          <button data-value="pastel" class="chip">パステル</button>
+          <button data-value="mono" class="chip">モノクロ</button>
+          <button data-value="vivid" class="chip">ビビッド</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <p class="label-text">プリセット</p>
+        <div class="chip-group">
+          <button class="chip preset" data-preset="sns">SNSアプリ</button>
+          <button class="chip preset" data-preset="fintech">Fintech</button>
+          <button class="chip preset" data-preset="ai">AI SaaS</button>
+        </div>
+      </div>
+
+      <button id="generate-btn" class="btn-primary">
+        アイコンを生成する
+      </button>
+
+      <p id="error-msg" class="error-text"></p>
+    </section>
+
+    <!-- 右：結果 -->
+    <section class="panel">
+      <div class="results-header">
+        <h2 class="section-title">生成アイコン候補</h2>
+        <button id="download-btn" class="btn-outline" disabled>
+          選択中をダウンロード
+        </button>
+      </div>
+      <div id="icons-grid" class="icons-grid">
+        <p class="placeholder">
+          条件を入力して「アイコンを生成する」を押すと、ここにAI生成アイコンが並びます。
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>IconForge AI</span>
+    <span>Team XXX</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
