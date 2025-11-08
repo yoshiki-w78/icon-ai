@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>IconForge AI - Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="page page-center">
+  <div class="card card-login">
+    <h1 class="title">IconForge AI</h1>
+    <p class="subtitle">ログインしてAIアイコンを生成</p>
+
+    <form id="login-form" class="form">
+      <label class="label">
+        メールアドレス
+        <input type="email" id="email" required class="input" placeholder="you@example.com" />
+      </label>
+      <label class="label">
+        パスワード
+        <input type="password" id="password" required class="input" placeholder="••••••••" />
+      </label>
+      <button type="submit" class="btn-primary">ログイン</button>
+      <p id="login-error" class="error-text"></p>
+    </form>
+
+    <p class="hint">デモ用の固定ユーザーでもOK（例: test@example.com / password）</p>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>
