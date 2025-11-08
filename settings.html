@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>AIcon｜Gemini設定</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="AIconのGemini APIキーと利用モデルを設定するページ。あなた自身のキーをブラウザ内で安全に管理できます。"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="page">
+  <!-- Header -->
+  <header class="header">
+    <div>
+      <div class="logo-line">
+        <span class="logo-mark">◎</span>
+        <h1 class="title">AIcon</h1>
+      </div>
+      <p class="subtitle">
+        Gemini APIキーと使用モデルを登録し、
+        <span class="subtitle-strong">AIcon内でプロンプト生成に利用するための設定ページ</span>
+      </p>
+    </div>
+    <div class="header-right">
+      <button
+        class="btn-header"
+        onclick="location.href='index.html'"
+      >
+        ← アイコン画面へ戻る
+      </button>
+      <button id="logout-btn" class="btn-header btn-header-secondary">
+        ↩ ログアウト
+      </button>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="layout layout-single">
+    <section class="panel">
+      <div class="section-head">
+        <h2 class="section-title">Gemini APIキー設定</h2>
+        <p class="section-caption">
+          AIconは初期検証として、利用者自身のGemini APIキーをブラウザ内
+          （sessionStorage）のみに保存し、そのキーで直接Geminiを呼び出します。
+        </p>
+      </div>
+
+      <!-- 現在の状態 -->
+      <div class="field">
+        <p class="label-text">現在の状態</p>
+        <p id="key-status" class="label-note">読み込み中...</p>
+      </div>
+
+      <!-- APIキー入力欄 -->
+      <label class="label">
+        Gemini APIキー
+        <span class="label-note">
+          例：AIza から始まるキー。入力内容はこのブラウザの
+          <strong>sessionStorage</strong> のみに保存され、サーバーには送信されません。
+        </span>
+        <input
+          id="gemini-api-key"
+          class="input"
+          placeholder="あなたのGemini APIキーを入力してください"
+        />
+      </label>
+
+      <!-- APIキー操作ボタン -->
+      <div class="api-key-actions">
+        <button id="save-key-btn" class="btn-primary btn-sm">
+          キーを保存する
+        </button>
+        <button id="clear-key-btn" class="btn-outline btn-sm">
+          保存済みキーを削除
+        </button>
+      </div>
+
+      <!-- モデル選択 -->
+      <div class="field models-block"></div>
+        <p class="label-text">使用するGeminiモデル</p>
+        <select id="gemini-model-select" class="input">
+          <option value="">
+            （APIキー保存後、「モデル一覧を取得」を押して利用可能モデルを読み込み）
+          </option>
+        </select>
+        <div class="api-key-actions" style="margin-top:6px;">
+          <button id="load-models-btn" class="btn-load-models">
+            🔍 モデル一覧を取得
+          </button>
+        </div>
+        <p class="label-note">
+          あなたのAPIキーで利用可能なモデル一覧を取得し、
+          AIconがプロンプト生成に利用するモデルを選択できます。
+        </p>
+      </div>
+
+      <!-- 注意事項 -->
+      <div class="note-box" style="margin-top: 12px;">
+        <p class="note-title">セキュリティと利用上の注意</p>
+        <ul class="note-list">
+          <li>APIキーはこのブラウザの sessionStorage のみに保存され、AIcon側サーバーには送信されません。</li>
+          <li>共有PCや画面共有中など、キーが見える状況での入力は避けてください。</li>
+          <li>モデル一覧の取得やプロンプト生成に失敗する場合は、CORS設定や利用上限、リージョン制限の可能性があります。</li>
+          <li>Gemini利用による課金・レート制限は、あなたのGoogleアカウントに紐づきます。</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-left">
+      <span class="footer-brand">AIcon</span>
+      <span class="footer-text">Gemini Settings</span>
+    </div>
+    <div class="footer-right">
+      <span class="footer-text">Team ショートカットサバイバル</span>
+    </div>
+  </footer>
+
+  <script src="settings.js"></script>
+</body>
+</html>
