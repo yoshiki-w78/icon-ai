@@ -2,11 +2,11 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>IconForge AI｜AIアイコン自動生成ツール</title>
+  <title>AIcon｜AIアイコン自動生成ツール</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
     name="description"
-    content="IconForge AIは、サービス名とキーワードから、GeminiとPixAIを組み合わせてプロトタイプ用アイコンを自動生成するハッカソン発のツールです。"
+    content="AIconは、日本語で相談しながらGeminiでアイコン用プロンプトを作成し、そのままAIアイコン案を表示できるツールです。"
   />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -16,141 +16,130 @@
     <div>
       <div class="logo-line">
         <span class="logo-mark">◎</span>
-        <h1 class="title">IconForge AI</h1>
+        <h1 class="title">AIcon</h1>
       </div>
       <p class="subtitle">
-        Geminiでプロンプトを最適化し、PixAIで一瞬でアイコンを生成する、
-        <span class="subtitle-strong">プロダクト用アイコン専用ジェネレータ</span>
+        <span class="subtitle-strong">AIアシスタントと対話しながら</span>、
+        最適なアイコン用プロンプトを作成して結果を確認できます。
       </p>
     </div>
     <div class="header-right">
-      <span class="tag">Hackathon Prototype</span>
-      <div class="stack-label">Gemini × PixAI × HTML/CSS/JS</div>
-      <button id="logout-btn" class="btn-ghost">ログアウト</button>
+      <button
+        class="btn-header"
+        onclick="location.href='settings.html'"
+      >
+        ⚙ Gemini設定
+      </button>
+      <button id="logout-btn" class="btn-header btn-header-secondary">
+        ↩ ログアウト
+      </button>
     </div>
   </header>
 
   <!-- Main -->
   <main class="layout">
-    <!-- 左：コントロールパネル -->
-    <section class="panel">
+    <!-- 左：AIアシスタント（チャット） -->
+    <section class="panel panel-chat">
       <div class="section-head">
-        <h2 class="section-title">アイコン要件の入力</h2>
+        <h2 class="section-title">AIアシスタント</h2>
+        <p class="section-caption">プロンプト作成をサポートします</p>
+      </div>
+
+      <div id="chat-window" class="chat-window">
+        <!-- 初期メッセージはJS側で追加 -->
+      </div>
+
+      <div class="chat-input-row">
+        <textarea
+          id="chat-input"
+          class="textarea chat-input"
+          placeholder="例）青系でシンプルなFintechサービスのアイコンを作りたい"
+        ></textarea>
+        <button id="chat-send-btn" class="btn-chat">送信</button>
+
+      </div>
+            <div class="chat-actions">
+        <button id="chat-generate-btn" class="btn-gemini-inline">
+          このままプロンプト生成
+        </button>
+      </div>
+
+      <p class="label-note">
+        ※ AIアシスタントは、最終的に右側の「プロンプト編集」に反映できる英語プロンプト案を提案します。
+      </p>
+    </section>
+
+    <!-- 右：プロンプト編集 ＋ 生成結果 -->
+    <section class="panel panel-editor">
+      <!-- プロンプト編集 -->
+      <div class="section-head editor-head">
+        <h2 class="section-title">プロンプト編集</h2>
         <p class="section-caption">
-          3ステップで、サービスに合ったアイコン候補を自動生成します。
+          左のチャット内容をもとに、最終的に画像生成に使うプロンプトを整えます。
         </p>
       </div>
 
-      <!-- サービス名 -->
-      <label class="label">
-        サービス名（任意）
-        <span class="label-note">表示用テキストやコンセプトに反映されます</span>
-        <input
-          id="service-name"
-          class="input"
-          placeholder="例）NovaPay, CloudChat, Linkly..."
-        />
-      </label>
+      <div class="editor-controls">
+        <div class="field-inline">
+          <label class="label-text" for="size-select">画像サイズ</label>
+          <select id="size-select" class="input input-inline">
+            <option value="512x512">512 × 512  (推奨）</option>
+            <option value="768x768">768 × 768</option>
+            <option value="1024x1024">1024 × 1024</option>
+          </select>
+        </div>
 
-      <!-- キーワード -->
+        <div class="field-inline">
+          <label class="label-text" for="style-select">スタイル</label>
+          <select id="style-select" class="input input-inline">
+            <option value="">指定なし</option>
+            <option value="minimal">Minimal</option>
+            <option value="flat">Flat</option>
+            <option value="gradient">Gradient</option>
+            <option value="outline">Outline</option>
+            <option value="neon">Neon</option>
+          </select>
+        </div>
+
+        <button id="reset-prompt-btn" class="btn-outline btn-xs editor-reset">
+          リセット
+        </button>
+      </div>
+
       <label class="label">
-        キーワード（必須）
+        最終プロンプト（編集可）
         <span class="label-note">
-          モチーフ・雰囲気・色などをカンマ区切りで入力してください
+          AIアシスタントが提案した内容をベースに、ここで自由に編集してください。
         </span>
         <textarea
-          id="keywords"
+          id="final-prompt"
           class="textarea"
-          placeholder="例）AI, シンプル, 稲妻, ブルー, 信頼感, ミニマル"
+          placeholder="A modern minimalist blue fintech icon..."
         ></textarea>
       </label>
 
-      <!-- スタイル -->
-      <div class="field">
-        <p class="label-text">スタイル</p>
-        <div class="chip-group" id="style-group">
-          <button data-value="gradient" class="chip chip-active">Gradient</button>
-          <button data-value="minimal" class="chip">Minimal</button>
-          <button data-value="flat" class="chip">Flat</button>
-          <button data-value="outline" class="chip">Outline</button>
-          <button data-value="neon" class="chip">Neon</button>
-        </div>
-      </div>
-
-      <!-- トーン -->
-      <div class="field">
-        <p class="label-text">トーン</p>
-        <div class="chip-group" id="tone-group">
-          <button data-value="casual" class="chip chip-active">カジュアル</button>
-          <button data-value="business" class="chip">ビジネス</button>
-          <button data-value="pop" class="chip">ポップ</button>
-          <button data-value="dark" class="chip">ダーク</button>
-        </div>
-      </div>
-
-      <!-- カラーパレット -->
-      <div class="field">
-        <p class="label-text">カラーパレット</p>
-        <div class="chip-group" id="palette-group">
-          <button data-value="auto" class="chip chip-active">自動提案</button>
-          <button data-value="blue" class="chip">ブルー系</button>
-          <button data-value="pastel" class="chip">パステル</button>
-          <button data-value="mono" class="chip">モノクロ</button>
-          <button data-value="vivid" class="chip">ビビッド</button>
-        </div>
-      </div>
-
-      <!-- プリセット -->
-      <div class="field">
-        <p class="label-text">クイックプリセット</p>
-        <div class="chip-group">
-          <button class="chip preset" data-preset="sns">SNSアプリ向け</button>
-          <button class="chip preset" data-preset="fintech">Fintech向け</button>
-          <button class="chip preset" data-preset="ai">AI SaaS向け</button>
-        </div>
-      </div>
-
-      <!-- 実行ボタン -->
-      <button id="generate-btn" class="btn-primary">
-        この条件でアイコンを生成する
+      <button id="generate-btn" class="btn-primary editor-generate">
+        アイコンを生成
       </button>
 
       <p id="error-msg" class="error-text"></p>
 
-      <!-- 注意書き（本番感アップ用） -->
-      <div class="note">
-        ※ 現在はデモ環境のため、一部アイコンはサンプル画像となる場合があります。<br />
-        ※ 商用利用ポリシーはPixAIの規約に準拠します。
-      </div>
-    </section>
-
-    <!-- 右：生成結果 -->
-    <section class="panel">
+      <!-- 生成結果 -->
       <div class="results-header">
-        <div>
-          <h2 class="section-title">生成されたアイコン候補</h2>
-          <p class="section-caption">
-            条件に基づいて複数案を提示します。使いたいものを1クリックで選択。
-          </p>
-        </div>
-        <button id="download-btn" class="btn-outline" disabled>
-          選択中のアイコンをダウンロード
+        <h3 class="section-title">生成結果</h3>
+        <button id="download-btn" class="btn-download" disabled>
+          ⬇ 選択中のアイコンをダウンロード
         </button>
       </div>
 
       <div id="icons-grid" class="icons-grid">
         <div class="placeholder-block">
-          <p class="placeholder-title">まだアイコンは生成されていません</p>
+          <p class="placeholder-title">まだアイコンは表示されていません</p>
           <p class="placeholder-text">
-            左側でサービスの情報とイメージを入力し、
-            <span class="placeholder-highlight">「この条件でアイコンを生成する」</span>
-            を押すと、ここにAI生成アイコンが一覧表示されます。
+            左の「AIアシスタント」と相談し、
+            <span class="placeholder-highlight">プロンプトを整えてから「アイコンを生成」</span>
+            を押すと、ここに候補が表示されます。
           </p>
-          <ul class="placeholder-list">
-            <li>ピッチ資料用のサービスロゴ案をまとめて確認</li>
-            <li>開発中プロダクトの仮アイコンを即時作成</li>
-            <li>チーム内でのデザイン方向性の共有に利用</li>
-          </ul>
         </div>
       </div>
     </section>
@@ -159,11 +148,11 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-left">
-      <span class="footer-brand">IconForge AI</span>
-      <span class="footer-text">Hackathon 2025 Prototype</span>
+      <span class="footer-brand">AIcon</span>
+      <span class="footer-text">Prompt to Icon Playground</span>
     </div>
     <div class="footer-right">
-      <span class="footer-text">Team XXX</span>
+      <span class="footer-text">Team ショートカットサバイバル</span>
     </div>
   </footer>
 
