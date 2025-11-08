@@ -1,4 +1,4 @@
-// settings.js - AIcon Gemini設定
+// settings.js - AIcon Gemini設宁E
 
 const GEMINI_KEY_STORAGE_KEY = "aicon_gemini_api_key";
 const GEMINI_MODEL_STORAGE_KEY = "aicon_gemini_model";
@@ -16,10 +16,10 @@ const logoutBtn = document.getElementById("logout-btn");
 function refreshStatus() {
   const saved = sessionStorage.getItem(GEMINI_KEY_STORAGE_KEY);
   if (saved) {
-    keyStatus.textContent = "保存済み：このブラウザにGemini APIキーが登録されています。";
+    keyStatus.textContent = "保存済み�E�このブラウザにGemini APIキーが登録されてぁE��す、E;
     keyStatus.classList.add("status-ok");
   } else {
-    keyStatus.textContent = "未設定：APIキーが保存されていません。";
+    keyStatus.textContent = "未設定：APIキーが保存されてぁE��せん、E;
     keyStatus.classList.remove("status-ok");
   }
 }
@@ -29,7 +29,7 @@ function applySavedModel() {
   const current = sessionStorage.getItem(GEMINI_MODEL_STORAGE_KEY);
   if (!current) return;
 
-  // value が存在していれば選択、なければ「Custom: ...」として追加
+  // value が存在してぁE��ば選択、なければ「Custom: ...」として追加
   const opt = Array.from(modelSelect.options).find(
     (o) => o.value === current
   );
@@ -56,26 +56,26 @@ window.addEventListener("DOMContentLoaded", () => {
 saveKeyBtn?.addEventListener("click", () => {
   const key = (geminiKeyInput.value || "").trim();
   if (!key) {
-    alert("APIキーを入力してください。");
+    alert("APIキーを�E力してください、E);
     return;
   }
   sessionStorage.setItem(GEMINI_KEY_STORAGE_KEY, key);
   refreshStatus();
-  alert("Gemini APIキーを保存しました（このブラウザのみ）。");
+  alert("Gemini APIキーを保存しました�E�このブラウザのみ�E�、E);
 });
 
 clearKeyBtn?.addEventListener("click", () => {
   sessionStorage.removeItem(GEMINI_KEY_STORAGE_KEY);
   geminiKeyInput.value = "";
   refreshStatus();
-  alert("保存されていたGemini APIキーを削除しました。");
+  alert("保存されてぁE��Gemini APIキーを削除しました、E);
 });
 
-// モデル一覧取得
+// モチE��一覧取征E
 loadModelsBtn?.addEventListener("click", async () => {
   const key = sessionStorage.getItem(GEMINI_KEY_STORAGE_KEY);
   if (!key) {
-    alert("先にGemini APIキーを保存してください。");
+    alert("先にGemini APIキーを保存してください、E);
     return;
   }
 
@@ -94,7 +94,7 @@ loadModelsBtn?.addEventListener("click", async () => {
     if (!res.ok) {
       const text = await res.text();
       console.error("models.list error:", text);
-      throw new Error("モデル一覧の取得に失敗しました。キーや権限を確認してください。");
+      throw new Error("モチE��一覧の取得に失敗しました。キーめE��限を確認してください、E);
     }
 
     const data = await res.json();
@@ -110,12 +110,12 @@ loadModelsBtn?.addEventListener("click", async () => {
     if (!usable.length) {
       const opt = document.createElement("option");
       opt.value = "";
-      opt.textContent = "generateContent対応モデルが見つかりませんでした";
+      opt.textContent = "generateContent対応モチE��が見つかりませんでした";
       modelSelect.appendChild(opt);
       return;
     }
 
-    // ソート（flash / pro 優先）
+    // ソート！Elash / pro 優先！E
     usable.sort((a, b) => {
       const na = (a.baseModelId || a.name || "").toLowerCase();
       const nb = (b.baseModelId || b.name || "").toLowerCase();
@@ -145,9 +145,9 @@ loadModelsBtn?.addEventListener("click", async () => {
 
       let label = m.displayName || base;
 
-      // 推奨モデル判定：gemini-2.5-flash があればそれをおすすめ
+      // 推奨モチE��判定：gemini-2.5-flash があれ�EそれをおすすめE
       if (base.startsWith("gemini-2.5-flash") && !hasExplicitRecommended) {
-        label += "（推奨）";
+        label += "�E�推奨�E�E;
         recommendedValue = base;
         hasExplicitRecommended = true;
       }
@@ -156,14 +156,14 @@ loadModelsBtn?.addEventListener("click", async () => {
       modelSelect.appendChild(opt);
     });
 
-    // 推奨モデルが見つからなければ、先頭を推奨扱いにする
+    // 推奨モチE��が見つからなければ、�E頭を推奨扱ぁE��する
     if (!recommendedValue && modelSelect.options.length > 0) {
       const firstOpt = modelSelect.options[0];
-      firstOpt.textContent = firstOpt.textContent + "（推奨）";
+      firstOpt.textContent = firstOpt.textContent + "�E�推奨�E�E;
       recommendedValue = firstOpt.value;
     }
 
-    // 以前の選択を尊重しつつ、なければ推奨モデルを選ぶ
+    // 以前�E選択を尊重しつつ、なければ推奨モチE��を選ぶ
     const saved = sessionStorage.getItem(GEMINI_MODEL_STORAGE_KEY);
     if (saved && [...modelSelect.options].some((o) => o.value === saved)) {
       modelSelect.value = saved;
@@ -172,19 +172,19 @@ loadModelsBtn?.addEventListener("click", async () => {
       sessionStorage.setItem(GEMINI_MODEL_STORAGE_KEY, recommendedValue);
     }
 
-    alert("モデル一覧を取得しました。（推奨）マークを参考にモデルを選択できます。");
+    alert("モチE��一覧を取得しました。（推奨�E��Eークを参老E��モチE��を選択できます、E);
   } catch (e) {
     console.error(e);
     modelSelect.innerHTML = "";
     const opt = document.createElement("option");
     opt.value = "";
-    opt.textContent = "モデル一覧の取得に失敗しました";
+    opt.textContent = "モチE��一覧の取得に失敗しました";
     modelSelect.appendChild(opt);
-    alert("モデル一覧の取得に失敗しました。コンソールを確認してください。");
+    alert("モチE��一覧の取得に失敗しました。コンソールを確認してください、E);
   }
 });
 
-// モデル選択変更時に保存
+// モチE��選択変更時に保孁E
 modelSelect?.addEventListener("change", () => {
   const value = modelSelect.value;
   if (value) {

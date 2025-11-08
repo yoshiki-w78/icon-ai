@@ -101,10 +101,14 @@ function renderGoogleButton() {
 
 // ログイン後の UI 更新
 function updateUIForLoggedInUser(user) {
-  const loginBtn = document.getElementById('logout-btn');
-  if (loginBtn) {
-    loginBtn.textContent = 'ログアウト';
-    loginBtn.onclick = handleLogout;
+  const authBtn = document.getElementById('auth-btn');
+  if (authBtn) {
+    authBtn.textContent = 'ログアウト';
+    // 既存のイベントリスナーを削除して新しいものを設定
+    const newBtn = authBtn.cloneNode(true);
+    authBtn.parentNode.replaceChild(newBtn, authBtn);
+    newBtn.id = 'auth-btn'; // ID を保持
+    newBtn.addEventListener('click', handleLogout);
   }
   
   console.log('UI updated for logged in user:', user.email);
@@ -113,38 +117,30 @@ function updateUIForLoggedInUser(user) {
 // ログアウト処理
 function handleLogout() {
   localStorage.removeItem('user');
+  localStorage.removeItem('iconforge_token');
   
   // Google のセッションもクリア
   if (googleInitialized && google.accounts && google.accounts.id) {
     google.accounts.id.disableAutoSelect();
   }
   
-  const loginBtn = document.getElementById('logout-btn');
-  if (loginBtn) {
-    loginBtn.textContent = 'ログイン';
-    loginBtn.onclick = () => {
-      const modal = document.getElementById('login-modal');
-      modal.classList.add('active');
-    };
-  }
-  
-  alert('ログアウトしました');
-  console.log('User logged out');
+  // /logout にリダイレクト
+  window.location.href = '/logout';
 }
 
 // ============================
 // Login Modal Control
 // ============================
 document.addEventListener('DOMContentLoaded', () => {
-  const loginBtn = document.getElementById('logout-btn');
+  const authBtn = document.getElementById('auth-btn');
   const modal = document.getElementById('login-modal');
   const closeBtn = document.getElementById('close-modal');
   const loginTabs = document.querySelectorAll('.login-tab');
   const loginPanels = document.querySelectorAll('.login-panel');
   
   // Show modal when login button is clicked
-  if (loginBtn) {
-    loginBtn.addEventListener('click', () => {
+  if (authBtn) {
+    authBtn.addEventListener('click', () => {
       modal.classList.add('active');
       
       // モーダルが開いたら Google ボタンをレンダリング
@@ -247,7 +243,8 @@ const GEMINI_KEY_STORAGE_KEY = "aicon_gemini_api_key";
 const GEMINI_MODEL_STORAGE_KEY = "aicon_gemini_model";
 
 // ==== 要素参照 ====
-const logoutBtn = document.getElementById("logout-btn");
+// ログイン/ログアウトボタンは auth-btn として参照
+// (実際の取得は各関数内で行う)
 
 const chatWindow = document.getElementById("chat-window");
 const chatInput = document.getElementById("chat-input"); // textarea想定
@@ -284,7 +281,8 @@ function escapeHtml(str) {
 if (logoutBtn) {
   logoutBtn.addEventListener("click", () => {
     localStorage.removeItem("iconforge_token");
-    window.location.href = "login.html";
+    localStorage.removeItem("user");
+    window.location.href = "/logout";
   });
 }
 
